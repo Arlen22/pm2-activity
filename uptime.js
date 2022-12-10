@@ -48,7 +48,7 @@ if (!process.argv[2]){
 function makeBarGraph(key) {
     let data = res[key];
     let m = max[key];
-    writeFileSync("output.json", JSON.stringify(res[key], null, 2));
+    // writeFileSync("output.json", JSON.stringify(res[key], null, 2));
     writeFileSync("chart.txt", Object.keys(data).map(k => {
         const part = data[k] / m;
         const len = Math.round(part * 60);
