@@ -3,7 +3,7 @@
 
 
 const { readFileSync, writeFileSync } = require("fs");
-const file = readFileSync("./pm2.log", "utf8");
+const file = readFileSync("/root/.pm2/pm2.log", "utf8");
 //2019-04-17T03:33:42: PM2 log: App [TiddlyServer:1] online
 const reg = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}): PM2 log: App \[([^\]]*)\:\d+] (.*)$/;
 
@@ -38,7 +38,7 @@ file.split("\n").map(e => {
         cur[app] = {};
     }
 });
-if (!process.argv[2]){
+if (!process.argv[2]) {
     console.log("Syntax: node uptime [app]")
     console.log("App: ", Object.keys(res).join(", "))
 } else {
@@ -48,10 +48,13 @@ if (!process.argv[2]){
 function makeBarGraph(key) {
     let data = res[key];
     let m = max[key];
-    // writeFileSync("output.json", JSON.stringify(res[key], null, 2));
-    writeFileSync("chart.txt", Object.keys(data).map(k => {
+
+    const chart = Object.keys(data).map(k => {
         const part = data[k] / m;
         const len = Math.round(part * 60);
-        return `${k} - ${part.toFixed(2)}: ${"=".repeat(len)}${" ".repeat(60-len)}|`;
-    }).join('\n'));
+        return `${k} - ${part.toFixed(2)}: ${"=".repeat(len)}${" ".repeat(60 - len)}|`;
+    });
+
+    writeFileSync("chart.txt", chart.join("\n") + "\n");
+    chart.slice(chart.length - 11).map(e => console.log(e));
 }
