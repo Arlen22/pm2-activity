@@ -1,0 +1,1 @@
+scp DSFA:/root/.pm2/pm2.log .
